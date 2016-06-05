@@ -29,7 +29,7 @@ public class CitationRepository {
     return jdbcTemplate.query(FIND_ALL_STMT, new CitationRowMapper());
   }
 
-  private static final String FIND_ALL_BY_ID =
+  private static final String FIND_BY_ID_STMT =
       " select"
     + "     id"
     + "   , auteur"
@@ -41,7 +41,7 @@ public class CitationRepository {
     ;
 
   public Citation findById(int id) {
-    return jdbcTemplate.queryForObject(FIND_ALL_BY_ID, new Object[]{id}, new CitationRowMapper());
+    return jdbcTemplate.queryForObject(FIND_BY_ID_STMT, new Object[]{id}, new CitationRowMapper());
   }
 
   private static final String INSERT_STMT =

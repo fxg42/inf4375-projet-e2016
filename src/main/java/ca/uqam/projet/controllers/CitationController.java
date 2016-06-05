@@ -1,7 +1,6 @@
 package ca.uqam.projet.controllers;
 
 import java.util.*;
-import java.time.*;
 
 import ca.uqam.projet.repositories.*;
 import ca.uqam.projet.resources.*;
@@ -10,7 +9,6 @@ import org.springframework.beans.factory.annotation.*;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/")
 public class CitationController {
 
   @Autowired CitationRepository repository;

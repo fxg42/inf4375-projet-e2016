@@ -16,17 +16,32 @@ public class CitationRepository {
 
   @Autowired private JdbcTemplate jdbcTemplate;
 
-  private static List<Citation> citations = Arrays.asList(
-      new Citation(1, "Si l’on sait exactement ce qu’on va faire, à quoi bon le faire ?", "Picasso")
-    , new Citation(2, "Le métier, c'est ce qui ne s'apprend pas.", "Picasso")
-  );
+  private static final String FIND_ALL_STMT =
+      " select"
+    + "     id"
+    + "   , auteur"
+    + "   , contenu"
+    + " from"
+    + "   citations"
+    ;
 
   public List<Citation> findAll() {
-    return citations;
+    return jdbcTemplate.query(FIND_ALL_STMT, new CitationRowMapper());
   }
 
+  private static final String FIND_BY_ID_STMT =
+      " select"
+    + "     id"
+    + "   , auteur"
+    + "   , contenu"
+    + " from"
+    + "   citations"
+    + " where"
+    + "   id = ?"
+    ;
+
   public Citation findById(int id) {
-    return citations.get(id-1);
+    return jdbcTemplate.queryForObject(FIND_BY_ID_STMT, new Object[]{ id }, new CitationRowMapper());
   }
 
   private static final String INSERT_STMT =
@@ -45,3 +60,14 @@ public class CitationRepository {
     });
   }
 }
+
+class CitationRowMapper implements RowMapper<Citation> {
+  public Citation mapRow(ResultSet rs, int rowNum) throws SQLException {
+    return new Citation(
+        rs.getInt("id")
+      , rs.getString("auteur")
+      , rs.getString("contenu")
+    );
+  }
+}
+

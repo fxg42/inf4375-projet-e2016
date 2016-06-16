@@ -11,15 +11,11 @@ var mountListeCitations = function (citations) {
 }
 
 var fetchAll = function () {
-  var xhr = new XMLHttpRequest()
-  xhr.open('get', '/citations', true)
-  xhr.onreadystatechange = function () {
-    if (xhr.readyState === 4 && xhr.status === 200) {
-      var citations = JSON.parse(xhr.responseText)
-      mountListeCitations(citations)
-    }
-  }
-  xhr.send()
+  fetch('/citations').then(function(resp) {
+    return resp.json()
+  }).then(function(data) {
+    mountListeCitations(data)
+  })
 }
 
 document.addEventListener('DOMContentLoaded', fetchAll)

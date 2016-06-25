@@ -65,8 +65,8 @@ class CitationRowMapper implements RowMapper<Citation> {
   public Citation mapRow(ResultSet rs, int rowNum) throws SQLException {
     return new Citation(
         rs.getInt("id")
-      , rs.getString("auteur")
       , rs.getString("contenu")
+      , rs.getString("auteur")
     );
   }
 }

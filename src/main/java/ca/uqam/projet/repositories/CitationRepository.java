@@ -1,6 +1,7 @@
 package ca.uqam.projet.repositories;
 
 import java.util.*;
+import java.util.stream.*;
 import java.sql.*;
 
 import ca.uqam.projet.resources.*;
@@ -42,6 +43,25 @@ public class CitationRepository {
 
   public Citation findById(int id) {
     return jdbcTemplate.queryForObject(FIND_BY_ID_STMT, new Object[]{id}, new CitationRowMapper());
+  }
+
+  private static final String FIND_BY_CONTENU_STMT =
+      " select"
+    + "     id"
+    + "   , ts_headline(contenu, q, 'HighlightAll = true') as contenu"
+    + "   , auteur"
+    + " from"
+    + "     citations"
+    + "   , to_tsquery(?) as q"
+    + " where"
+    + "   contenu @@ q"
+    + " order by"
+    + "   ts_rank_cd(to_tsvector(contenu), q) desc"
+    ;
+
+  public List<Citation> findByContenu(String... tsterms) {
+    String tsquery = Arrays.stream(tsterms).collect(Collectors.joining(" & "));
+    return jdbcTemplate.query(FIND_BY_CONTENU_STMT, new Object[]{tsquery}, new CitationRowMapper());
   }
 
   private static final String INSERT_STMT =

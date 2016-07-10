@@ -18,6 +18,11 @@ public class CitationController {
     return repository.findAll();
   }
 
+  @RequestMapping("/citations/contenu")
+  public List<Citation> findByContenu(@RequestParam("term") String[] tsterms) {
+    return (tsterms.length == 0) ? repository.findAll() : repository.findByContenu(tsterms);
+  }
+
   @RequestMapping("/citations/{id}")
   public Citation findById(@PathVariable("id") int id) {
     return repository.findById(id);

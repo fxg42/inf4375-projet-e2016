@@ -17,7 +17,6 @@ public class ApplicationController {
 
   @RequestMapping("/")
   public String index(Model model) {
-    model.addAttribute("citations", repository.findAll());
     return "index";
   }
 }
